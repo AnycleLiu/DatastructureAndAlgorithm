@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace AnycleLiu.Algorithm
+namespace AnycleLiu.Algorithm.Math
 {
     /// <summary>
     /// 四则运算计算器
@@ -12,9 +12,9 @@ namespace AnycleLiu.Algorithm
     /// 支持负数，例如-1*2
     /// 支持小数
     /// </summary>
-    public class MathExpressionCalculator : IExpressionCalculator
+    public class MathExpressionCalculator
     {
-        private bool CanPop(char c1, char c2)
+        private static bool CanPop(char c1, char c2)
         {
             if ((c1 == '+' || c1 == '-') && (c2 == '+' || c2 == '-'))
             {
@@ -33,7 +33,7 @@ namespace AnycleLiu.Algorithm
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public IEnumerable<string> InfixToSuffix(string expression)
+        public static IEnumerable<string> InfixToSuffix(string expression)
         {
             if (string.IsNullOrWhiteSpace(expression)) return new string[0];
 
@@ -93,7 +93,7 @@ namespace AnycleLiu.Algorithm
             return s.ToString().Split(' ').Where(x => !string.IsNullOrWhiteSpace(x));
         }
 
-        private decimal Calc(decimal n1, decimal n2, string op)
+        private static decimal Calc(decimal n1, decimal n2, string op)
         {
             switch (op)
             {
@@ -111,9 +111,9 @@ namespace AnycleLiu.Algorithm
         /// </summary>
         /// <param name="suffix"></param>
         /// <returns></returns>
-        public decimal? CalcSuffixExpression(IEnumerable<string> suffix)
+        public static decimal CalcSuffixExpression(IEnumerable<string> suffix)
         {
-            if (suffix.Count() == 0) return null;
+            if (suffix.Count() == 0) throw new ArgumentNullException(nameof(suffix));
 
             Stack<decimal> num = new Stack<decimal>();
 
@@ -134,9 +134,9 @@ namespace AnycleLiu.Algorithm
             return num.Pop();
         }
 
-        public object Calculate(string expression)
+        public static decimal Calculate(string expression)
         {
-            if (string.IsNullOrWhiteSpace(expression)) return null;
+            if (string.IsNullOrWhiteSpace(expression)) throw new ArgumentNullException(nameof(expression));
 
             var r = new Regex(@"\s+", RegexOptions.Compiled);
             expression = r.Replace(expression, "");
